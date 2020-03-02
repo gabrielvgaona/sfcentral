@@ -58,7 +58,7 @@ sd_ellipse <- function (points = NULL, x = NULL, y = NULL,
 
   tmpA <- points
   tmpA2 <- tmpA ^ 2
-  tmpAc <- t(t(tmpA[, 1:2]) - centre)
+  tmpAc <- t(t(tmpA) - centre)
   tmpAc2 <- tmpAc ^ 2
   tmpAcp <- purrr::map_dbl(seq_len(nrow(tmpA)), ~ prod(tmpAc[.x, ]))
 
@@ -99,9 +99,7 @@ sd_ellipse <- function (points = NULL, x = NULL, y = NULL,
         2 * (sum(weights * tmpAcp)) *  sinthetacostheta) / sum(weights))
   } else {
     sigmax <-
-      sqrt(2) * sqrt((sum(colSums(tmpAc2) * c(
-        cos2theta, sin2theta
-      )) -
+      sqrt(2) * sqrt((sum(colSums(tmpAc2) * c(cos2theta, sin2theta)) -
         2 * sum(tmpAcp) * sinthetacostheta) / (n - 2))
     sigmay <-
       sqrt(2) * sqrt((sum(colSums(tmpAc2) * c(
