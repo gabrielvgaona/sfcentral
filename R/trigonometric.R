@@ -19,15 +19,15 @@ tan_d <- function(x) return(tan(x * pi / 180))
 
 #' @export
 #' @rdname trigonometric
-asin_d <- function(x) return(asin(x * 180 / pi))
+asin_d <- function(x) return(asin(x) * 180 / pi)
 
 #' @export
 #' @rdname trigonometric
-acos_d <- function(x) return(acos(x * 180 / pi))
+acos_d <- function(x) return(acos(x) * 180 / pi)
 
 #' @export
 #' @rdname trigonometric
-atan_d <- function(x) return(atan(x * 180 / pi))
+atan_d <- function(x) return(atan(x) * 180 / pi)
 
 #' @export
 #' @rdname trigonometric
