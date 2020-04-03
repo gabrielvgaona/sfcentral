@@ -10,6 +10,7 @@
 #'   location from the specified centre.
 #' @importFrom splancs gridpts
 #'
+#' @export
 distances <- function(destmat, centre = NULL) {
   # Control for few centre coordiantes
   if(!is.null(centre) & length(centre) < 2) {
