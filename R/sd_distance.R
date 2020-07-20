@@ -64,6 +64,7 @@ sd_distance <- function (points = NULL,
   }
 
   sddarea <- pi * SDD^2
+  sddperim <- pi * 2 * SDD
   B <- min(SDD, SDD)
   A <- max(SDD, SDD)
   d2 <- (A - B) * (A + B)
@@ -85,8 +86,9 @@ sd_distance <- function (points = NULL,
     rbind(
       c(weighted = weighted,
         centre = centre,
-        SDD.radius = SDD,
-        SDD.area = sddarea
+        radius = SDD,
+        area = sddarea,
+        perimeter = sddperim
       )
     )
   )
