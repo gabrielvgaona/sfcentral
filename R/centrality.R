@@ -58,15 +58,12 @@ mean_centre <- function(points, weights = NULL) {
 
   # Mean centre calculation
   n <- dim(points)[1]
+  weights <- if (is.null(weights)) 1/n else weights / sum(weights)
   i = 1
   while (i <= ncol(points)) {
-    if (!is.null(weights)) {
-      points[[i]] <- points[[i]] * weights / sum(weights)
-    } else {
-      points[[i]] <- points[[i]] / n
+      points[,i] <- points[,i] * weights
+      i = i + 1
     }
-    i = i + 1
-  }
 
   centre <- colSums(points)
   centre
