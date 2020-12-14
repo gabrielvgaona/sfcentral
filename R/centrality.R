@@ -33,7 +33,7 @@ median_centre <- function(points) {
   mc <- vector("numeric", ncol(points))
   i = 1
   while (i <= ncol(points)) {
-    mc[i] <- stats::median(points[[i]])
+    mc[i] <- stats::median(points[,i])
     i = i + 1
   }
   names(mc) <- colnames(points)
