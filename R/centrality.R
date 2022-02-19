@@ -30,14 +30,7 @@ median_centre <- function(points) {
   }
 
   # Compute median centre
-  mc <- vector("numeric", ncol(points))
-  i = 1
-  while (i <= ncol(points)) {
-    mc[i] <- stats::median(points[,i])
-    i = i + 1
-  }
-  names(mc) <- colnames(points)
-  mc
+  apply(points, 2, median)
 }
 
 #' @export
@@ -46,6 +39,10 @@ mean_centre <- function(points, weights = NULL) {
   # Control for few columns in points
   if (ncol(points) < 2) {
     stop("'points' must be of class matrix, data.frame or tibble with 2 or 3 numeric columns")
+  }
+
+  if (!is.null(weights) && nrow(points) != length(weights)) {
+    stop("'weights' must be same length as number of 'points'")
   }
 
   #  Control for to many columns in points
@@ -57,16 +54,10 @@ mean_centre <- function(points, weights = NULL) {
   }
 
   # Mean centre calculation
-  n <- dim(points)[1]
-  weights <- if (is.null(weights)) 1/n else weights / sum(weights)
-  i = 1
-  while (i <= ncol(points)) {
-      points[,i] <- points[,i] * weights
-      i = i + 1
-    }
+  if(!is.null(weights))
+    return(apply(points, 2, weighted.mean, w = weights))
 
-  centre <- colSums(points)
-  centre
+  apply(points, 2, mean)
 }
 
 
