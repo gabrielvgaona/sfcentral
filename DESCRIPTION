@@ -19,8 +19,10 @@ Description: aspace2 package is a fork of aspace package from Randy Bui, Ron N.
     conceived to avoid the default output assigns and file writings. This is 
     primarilly intended to be used in a tidy* context, (e.g in `dplyr::groupy_by`,
     `dplyr::summarise`, `dplyr::mutate`, etc, contexts).
-License: GPL (>= 2)
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 2.15.1), splancs, Hmisc, purrr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.2
+Imports: 
+    stats
