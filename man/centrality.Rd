@@ -14,7 +14,7 @@ mean_centre(points, weights = NULL)
 
 central_feature(points)
 
-centre_min_dis(points, dist = 100)
+centre_min_dis(points, dist = 100, npts = 10000)
 
 central_feature2pts(points, points2)
 }
@@ -25,6 +25,8 @@ central_feature2pts(points, points2)
 
 \item{dist}{Atomic numeric, Default 100. Hold distance value between i
 and ith iterations.}
+
+\item{npts}{number of points to calculate the grid resolution}
 }
 \value{
 Depends on input, returns a Numeric vector of 2 or 3 values

@@ -86,7 +86,8 @@ central_feature <- function(points) {
 #' @importFrom splancs gridpts
 #' @export
 #' @rdname centrality
-centre_min_dis <- function(points, dist = 100) {
+#' @param npts number of points to calculate the grid resolution
+centre_min_dis <- function(points, dist = 100, npts = 10000) {
   # Control for few columns in points
   if (ncol(points) < 2) {
     stop("'points' must be of class matrix, data.frame or tibble with 2 numeric columns")
@@ -100,50 +101,34 @@ centre_min_dis <- function(points, dist = 100) {
     points <- points[, 1:2]
   }
 
-  # Initializing
-  x <- c() #HOLD X-COORD OF CMD FOR EACH ITERATION
-  y <- c() #HOLD Y-COORD OF CMD FOR EACH ITERATION
-  d <- c() #HOLD DISTANCE VALUE BETWEEN I AND ITH ITERATIONS
-  n <- c() #HOLD ITERATION NUMBER
-  cells <-
-    c() #HOLD NUMBER OF CELLS IN EACH GRID CREATED FOR EACH ITERATION
+  d <- dist
+  x <- y <- n <- cells <- 0
+  i <- dx <- dy <- 1
 
-  # INITIALIZE OBJECTS, COUNTERS, GRID SIZE
-  i <- 1
-  xy <- points[1, ]
-  xy[] <- 0
-  d[i] <- dist
-  n <- 0
-  cells[i] <- 0
-  dx <- 1 #INITIALIZE GRID SPACING IN X
-  dy <-
-    1 #INITIALIZE GRID SPACING IN Y, LARGER NUMBER = MORE CELLS, HERE IT IS SET TO 1 CELLS IN X,Y
-
-  # GENERATE MCP
   hpts <- chull(points)
-
   MCP <- cbind(points[hpts, 1], points[hpts, 2])
 
-  while (d[i] >= dist) {
-    grid <- gridpts(MCP, dx, dy)
-
-    sumdist.CMD <- vector("numeric", nrow(grid))
+  while (d[length(d)] >= dist) {
+    grid <- gridpts(MCP, npts, dx, dy)
+    sumdist.cmd <- vector("numeric", nrow(grid))
     j = 1
     while (j <= nrow(grid)) {
-      sumdist.CMD[j] <- sum(distances(points, centre = grid[j, ]))
+      sumdist.cmd[j] <- sum(distances(points, centre = grid[j, ]))
       j = j + 1
     }
-    CMD <- grid[which.min(sumdist.CMD), ]
+    CMD <- grid[which.min(sumdist.cmd),]
     #Dump CMD for each interation
-    xy[i + 1, ] <- CMD
+    x[i + 1] <- CMD[1]
+    y[i + 1] <- CMD[2]
     #distance between current and previous
-    d[i + 1] <- distances(CMD, xy[i, ])
+    d[i + 1] <- distances(matrix(CMD, ncol = ncol(grid)), c(x[i],y[i]))
     n[i + 1] <- dx
     cells[i + 1] <- nrow(grid)
     i <- i + 1
     dx <- dx + 1
     dy <- dy + 1
   }
+  xy <- cbind(x, y)
   names(xy) <- names(points)
   #Results
   result <- data.frame(centre = xy,
