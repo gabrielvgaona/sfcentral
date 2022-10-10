@@ -22,8 +22,8 @@ RoxygenNote: 7.2.1
 Imports: 
     geodist (>= 0.0.7),
     Hmisc (>= 4.6.0),
-    lwgeom (>= 0.2.9),
-    scales (>= 1.2.1),
+    lwgeom (>= 0.2.0),
+    scales (>= 1.2.0),
     sf (>= 1.0.8),
     stats
 Suggests: 
