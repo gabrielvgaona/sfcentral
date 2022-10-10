@@ -1,7 +1,6 @@
 Package: aspace2
-Type: Package
-Title: Centrographic statistics and computational geometries for spatial point 
-    patterns in 2D/3D
+Title: Centrographic statistics and spatial dispersion for spatial point 
+    patterns
 Version: 0.0.1
 Authors@R: 
     person(given = "Gabriel V.",
@@ -21,8 +20,16 @@ Description: aspace2 package is a fork of aspace package from Randy Bui, Ron N.
     `dplyr::summarise`, `dplyr::mutate`, etc, contexts).
 License: GPL (>= 3)
 Encoding: UTF-8
-LazyData: true
-Depends: R (>= 2.15.1), splancs, Hmisc, purrr
-RoxygenNote: 7.1.2
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
 Imports: 
+    geodist (>= 0.0.7),
+    Hmisc (>= 4.7.1),
+    lwgeom (>= 0.2.9),
+    scales (>= 1.2.1),
+    sf (>= 1.0.8),
     stats
+Suggests: 
+    ggplot2 (>= 3.3.6),
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
