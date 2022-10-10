@@ -32,7 +32,8 @@ coordinates, standard deviation in each axis, space(area for 2D, volume for
 3D) and number of dimensions in coordinates.
 }
 \description{
-Standard deviation box calculator in 2D or 3D
+Calculate the spatial deviaction box from a points sf dataset.
+#' @author Gabriel Gaona
 }
 \examples{
  requireNamespace("ggplot2", quietly = TRUE)
@@ -53,7 +54,4 @@ Standard deviation box calculator in 2D or 3D
  ggplot() +
    geom_sf(data = SD_BOX, fill = NA, color = "darkolivegreen") +
    geom_sf(data = points, color = "steelblue", size = 0.5)
-}
-\author{
-Gabriel Gaona
 }

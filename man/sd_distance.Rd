@@ -5,7 +5,7 @@
 \alias{st_sd_distance.sfg}
 \alias{st_sd_distance.sf}
 \alias{st_sd_distance.sfc}
-\title{Standard deviation distance calculator (2D)}
+\title{Standard deviation distance calculator}
 \usage{
 st_sd_distance(.x, centre = NULL, weights = NULL, ...)
 
@@ -31,7 +31,7 @@ A sf \code{"POLYGON"} with atributes: radius (standard deviation distance)
 and area surrounding, perimeter, center coordinates, and if weigted indicator.
 }
 \description{
-Standard deviation distance calculator (2D)
+Calculate the spatial deviaction distance from a points sf dataset.
 }
 \examples{
   requireNamespace("ggplot2", quietly = TRUE)

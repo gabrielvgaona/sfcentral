@@ -66,7 +66,7 @@ moving during iterations.}
 \code{"Simple Features"} of lenght 1.
 }
 \description{
-Spatial centrality
+Functions to find spatial measures of gravity centers.
 }
 \details{
 Spatial centers are spatial measures of the gravity center. The

@@ -1,5 +1,6 @@
 #' @title Spatial centrality
 #' @author Gabriel Gaona
+#' @description Functions to find spatial measures of gravity centers.
 #' @note inpired on `aspace::*()` from Ron Buliung & Randy Bui (2012)
 #' @param .x,.y  \code{sf} points 2D or 3D
 #' @param weights Numeric. Used in for weigthed Mean Center. Has to be same length

@@ -1,6 +1,6 @@
 #' @title Standard deviation box calculator in 2D or 3D
-#'
-#' @author Gabriel Gaona
+#' @description Calculate the spatial deviaction box from a points sf dataset.
+#' #' @author Gabriel Gaona
 #' @param .x  matrix, datat.frame or tibble of .x 2D or 3D
 #' @param centre  Numeric. Coordinates 2D or 3D of central point. Default NULL,
 #'   performs a calculation of mean_centre() from point localities

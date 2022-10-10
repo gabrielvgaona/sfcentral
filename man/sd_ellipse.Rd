@@ -5,7 +5,7 @@
 \alias{st_sd_ellipse.sfg}
 \alias{st_sd_ellipse.sf}
 \alias{st_sd_ellipse.sfc}
-\title{Standard deviation ellipse calculator (2D)}
+\title{Standard deviation ellipse calculator}
 \usage{
 st_sd_ellipse(.x, centre = NULL, weights = NULL, ...)
 
@@ -32,7 +32,7 @@ rotation (theta and theta_corrected) and geometry properties (eccentricity, area
 and perimeter)
 }
 \description{
-Standard deviation ellipse calculator (2D)
+Calculate the spatial deviaction ellipse from a points sf dataset.
 }
 \examples{
   requireNamespace("ggplot2", quietly = TRUE)

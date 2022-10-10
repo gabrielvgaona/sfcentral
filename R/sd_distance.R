@@ -1,4 +1,5 @@
-#' @title Standard deviation distance calculator (2D)
+#' @title Standard deviation distance calculator
+#' @description Calculate the spatial deviaction distance from a points sf dataset.
 #' @author Gabriel Gaona
 #' @param .x  Points \code{sf} object
 #' @param centre  \code{sf} \code{sfc} of one point, numeric, matrix, data.frame
