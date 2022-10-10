@@ -1,4 +1,4 @@
 library(testthat)
-library(aspace2)
+library(sfcentral)
 
-test_check("aspace2")
+test_check("sfcentral")

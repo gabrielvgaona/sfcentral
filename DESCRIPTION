@@ -1,6 +1,5 @@
-Package: aspace2
-Title: Centrographic statistics and spatial dispersion for spatial point 
-    patterns
+Package: sfcentral
+Title: Spatial centrallity and dispersion statistics
 Version: 0.1.0
 Authors@R: 
     person(given = "Gabriel V.",
@@ -10,13 +9,11 @@ Authors@R:
            comment = c(ORCID = "0000-0003-4666-2248"))
 Date: 2020-02-28
 Maintainer: Gabriel Gaona <gabo@gavg712.com>
-Description: aspace2 package is a fork of aspace package from Randy Bui, Ron N. 
-    Buliung and Tarmo K. Remmel (2012). Like these, aspace2 package contains the
-    same collection of functions for computing centrographic statistics (e.g., 
-    standard distance, standard deviation ellipse, standard deviation box) for 
-    observations taken at point locations in 2D or 3D. The aspace2 library was 
-    conceived to avoid the default output assigns and file writings. This is 
-    primarilly intended to be used in a tidy* context, (e.g in `dplyr::groupy_by`,
+Description: sfcentral package is a collection of functions for computing 
+    centrographic statistics (e.g., standard distance, standard deviation 
+    ellipse, standard deviation box) for observations taken at point locations 
+    in 2D or 3D. The sfcentral library was inspired in aspace package but 
+    conceived to be used in a tidy*-sf context, (e.g in `dplyr::groupy_by`, 
     `dplyr::summarise`, `dplyr::mutate`, etc, contexts).
 License: GPL (>= 3)
 Encoding: UTF-8
