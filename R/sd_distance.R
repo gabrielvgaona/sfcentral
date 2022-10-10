@@ -28,25 +28,25 @@
 #'     geom_sf(data = SDD, fill = NA, color = "darkolivegreen") +
 #'     geom_sf(data = points, color = "steelblue", size = 0.5)
 #' @export
-#' @rdname st_sd_distance
+#' @rdname sd_distance
 st_sd_distance = function(.x, centre = NULL, weights = NULL, ...) UseMethod("st_sd_distance")
 
 #' @export
-#' @rdname st_sd_distance
+#' @rdname sd_distance
 st_sd_distance.sfg <- function(.x, centre = NULL, weights = NULL, ...){
   .x <- st_geometry(.x)
   st_sd_distance.sfc(.x, centre = centre, weights = weights, ...)
 }
 
 #' @export
-#' @rdname st_sd_distance
+#' @rdname sd_distance
 st_sd_distance.sf <- function(.x, centre = NULL, weights = NULL, ...){
   .x <- st_geometry(.x)
   st_sd_distance.sfc(.x, centre = centre, weights = weights, ...)
 }
 
 #' @export
-#' @rdname st_sd_distance
+#' @rdname sd_distance
 st_sd_distance.sfc <- function (.x,
                             centre = NULL,
                             weights = NULL,
