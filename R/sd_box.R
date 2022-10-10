@@ -1,110 +1,96 @@
 #' @title Standard deviation box calculator in 2D or 3D
 #'
 #' @author Gabriel Gaona
-#' @param points  matrix, datat.frame or tibble of points 2D or 3D
+#' @param .x  matrix, datat.frame or tibble of .x 2D or 3D
 #' @param centre  Numeric. Coordinates 2D or 3D of central point. Default NULL,
 #'   performs a calculation of mean_centre() from point localities
-#' @param weights Numeric. Same length of number of points.
-#' @param output Character. "coord" to return coordinates or sd box in 2D or 3D.
-#'   "param" to return sd box attributes 2D or 3D. Default c("coord", "param"),
-#'   to return both as list.
+#' @param weights Numeric. Same length of number of .x.
+#' @param ... ignored
 #' @return Depends on input, "coords" returns a data.frame of 2 or 3 columns and
 #'   4 or 8 point coordinates. "param" returns a data.frame with centre
 #'   coordinates, standard deviation in each axis, space(area for 2D, volume for
 #'   3D) and number of dimensions in coordinates.
 #' @importFrom Hmisc wtd.var
-#' @importFrom stats sd
+#' @examples
+#'  requireNamespace("ggplot2", quietly = TRUE)
+#'  library(sf, quietly = TRUE)
+#'  library(ggplot2)
+#'  bbx <- matrix(c(697047,9553483,
+#'                  696158,9560476,
+#'                  700964,9561425,
+#'                  701745,9555358),
+#'                byrow = TRUE,
+#'                ncol = 2)
+#'  bbx <- st_multipoint(bbx)
+#'  bbx <- st_cast(bbx,"POLYGON")
+#'  bbx <- st_sfc(bbx, crs = 31992)
+#'  set.seed(1234)
+#'  points <- st_sf(geometry = st_sample(bbx, 100))
+#'  SD_BOX <- st_sd_box(points)
+#'  ggplot() +
+#'    geom_sf(data = SD_BOX, fill = NA, color = "darkolivegreen") +
+#'    geom_sf(data = points, color = "steelblue", size = 0.5)
 #' @export
 #' @rdname sd_box
-sd_box <- function(points, centre=NULL, weights=NULL,
-                     output = c("coord", "param")) {
+st_sd_box <- function(.x, centre = NULL, weights = NULL, ...) UseMethod("st_sd_box")
 
-  if(!is.null(centre) & length(centre) < 2) {
-    stop("Centre must be a c(x, y) or c(x, y, z) vector")
-  }
-
-  if(ncol(points) < 2) {
-    # ERROR: TOO FEW COLUMNS IN DESTINATION COORDINATE MATRIX
-    # SET DESCRIPTIVE ERROR CODE AND GIVE WARNING
-    stop("'points' must be of class matrix, data.frame or tibble with xy or xyz columns")
-  }
-
-  if(ncol(points) > 3) {
-    warning("'points' more than 3 columns. Only first three columns are being used as xyz coordinates")
-    points <- points[,1:3]
-  }
-
-  if(is.null(centre))  centre <- mean_centre(points, weights = weights)
-
-  if(ncol(points) != length(centre)) {
-    if(ncol(points) < length(centre)) {
-      centre <- centre[1:2]
-      warning("More 'centre' dimensions than 'points'. Extra dimensions droped...")
-    } else {
-      points <- points[,1:2]
-      warning("More 'points' dimensions than 'centre'. Extra dimensions droped...")
-    }
-  }
-
-  # STORE THE COUNT OF POINTS/CASES IN THE SOURCE DATASET
-  n <- dim(points)[1]
-
-
-  # INITIALIZE FUNCTION VARIABLE WITH PARAMETER VALUE
-  dist <- distances(points, centre)
-
-  # TEST WHETHER A SUFFICIENT NUMBER OF POINTS WERE SUPPLIED
-  if(length(dist) < 3) stop("Not enough values to compute SDD")
-
-  SD <- vector("numeric", ncol(points))
-  names(SD) <- names(points)
-  if(!is.null(weights)) {
-    #PERFORM THE WEIGHTED STANDARD DEVIATION DISTANCE COMPUTATION (WEIGHTED SDD)
-    SDD <- sqrt(sum((weights*dist^2)/((sum(weights)) - 2) ) )
-
-    # COMPUTE AND ADD THE STANDARD DEVIATION OF THE X AND Y COORDINATES
-    i = 1
-    while(i <= ncol(points)){
-      SD[i] <- sqrt(Hmisc::wtd.var(points[[i]], weights))
-      i = i + 1
-    }
-  } else {
-    # PERFORM THE STANDARD DEVIATION DISTANCE COMPUTATION (SDD)
-    SDD <- sqrt(sum(dist^2/(length(dist) - 2) ) )
-
-    # COMPUTE AND ADD THE STANDARD DEVIATION OF THE X AND Y COORDINATES
-    i = 1
-    while(i <= ncol(points)){
-      SD[i] <- sd(points[[i]])
-      i = i + 1
-    }
-  }
-
-  # COMPUTE THE AREA OF THE SD BOX
-  space <- prod(2*SD)
-
-  # STORE THE COORDINATES OF EACH CORNER OF THE SD BOX IN SEPARATE OBJECTS
-
-
-  dirs <- t(expand.grid(rep(list(c(1, -1)), length(SD))))
-  box.points <- t(centre + dirs * SD)
-  box.points <- as.data.frame(box.points)
-  colnames(box.points) <- names(points)
-  class(box.points) <- c("box_coords", class(box.points))
-
-  param <- as.data.frame(rbind(c(Centre = centre,
-          sd = SD,
-          box_space = space,
-          dim = ncol(points))))
-  class(param) <- c("box_param", class(param))
-
-
-  out <- list("coord" = box.points,
-              "param" = param)[output]
-
-  class(out) <- c("sd_box", class(out))
-
-  if(length(out) == 1) out <- out[[1]]
-  return(out)
+#' @export
+#' @rdname sd_box
+st_sd_box.sfg <- function(.x, centre = NULL, weights = NULL, ...){
+  .x <- st_geometry(.x)
+  st_sd_box.sfc(.x, centre = centre, weights = weights, ...)
 }
+
+#' @export
+#' @rdname sd_box
+st_sd_box.sf <- function(.x, centre = NULL, weights = NULL, ...){
+  .x <- st_geometry(.x)
+  st_sd_box.sfc(.x, centre = centre, weights = weights, ...)
+}
+
+#' @export
+#' @rdname sd_box
+st_sd_box.sfc <- function(.x, centre = NULL, weights = NULL, ...) {
+
+  if (is.null(weights)) {
+    weigthed <- FALSE
+    weights <- rep(1, nrow(st_coordinates(.x)))
+  }
+
+  if(is.null(centre)) {
+    centre <- .mean_centre(.x = .x, weights = weights)
+  } else {
+    centre_class <- class(centre)[1]
+    centre <- switch(centre_class,
+                     "matrix" = ,
+                     "numeric" = st_sfc(st_point(centre), crs = st_crs(.x)),
+                     "data.frame" = st_sfc(st_point(as.matrix(centre[1,1:2])),
+                                           crs = st_crs(.x)),
+                     "list" = st_sfc(st_point(as.matrix(as.data.frame(centre))),
+                                     crs = st_crs(.x)),
+                     "sfc_POINT" = centre[1],
+                     "sf" = st_geometry(centre),
+                     centre
+    )
+  }
+
+  SD <- apply(st_coordinates(.x), 2, Hmisc::wtd.var, weights = weights) ^ (1/2)
+
+  dirs <- t(expand.grid(rep(list(c(1, -1)), each = length(SD))))
+  dirs <- dirs[,rank(apply(dirs, 2, \(x){atan2(x[2], x[1])}))]
+  sd_bbox <- t(as.numeric(st_coordinates(centre)) + dirs * SD)
+  sd_bbox <- st_multipoint(sd_bbox)
+  sd_bbox <- st_cast(sd_bbox, "POLYGON")
+  sd_bbox <- st_sf(feature = "standard distance box",
+                   geometry = st_sfc(sd_bbox, crs = st_crs(.x)))
+
+  param <- data.frame(
+    centre = st_coordinates(centre),
+    sd = t(SD),
+    area = st_area(sd_bbox)
+  )
+
+  return(cbind(sd_bbox, param))
+}
+
 

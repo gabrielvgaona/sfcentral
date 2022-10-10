@@ -1,184 +1,193 @@
-#' @title Centrality calculator in 2D or 3D
+#' @title Spatial centrality
 #' @author Gabriel Gaona
-#' @note Mean, Median and Central features calculators are modified versions
-#'   of `aspace::*()` from Ron Buliung & Randy Bui (2012)
-#' @param points,points2  matrix, datat.frame or tibble of points 2D or 3D
-#' @param weights Numeric. Same length of number of points.
-#' @param dist Atomic numeric, Default 100. Hold distance value between i
-#'   and ith iterations.
-#' @details Central minimum distance can only performed in 2D. Other centrality
-#'   calculations could be used in 2D or 3D points
-#' @return Depends on input, returns a Numeric vector of 2 or 3 values
-#' @importFrom splancs gridpts
-#' @importFrom grDevices chull
-#' @importFrom stats dist median sd
+#' @note inpired on `aspace::*()` from Ron Buliung & Randy Bui (2012)
+#' @param .x,.y  \code{sf} points 2D or 3D
+#' @param weights Numeric. Used in for weigthed Mean Center. Has to be same length
+#'                as number of points.
+#' @param method Character. Type of center point to calculate
+#' @param dist Atomic numeric, Default 100. Starting distance value for center
+#'             moving during iterations.
+#' @param tol atomic numeric,
+#' @param crs EPSG code or CRS object returned from \code{st_crs()}
+#' @param ... arguments to be passed to or from other methods
+#' @details Spatial centers are spatial measures of the gravity center. The
+#'          "mean center" is equivalente to the centroid of the points. Calculations
+#'          could be used in 2D or 3D points.
+#' @return \code{"Simple Features"} of lenght 1.
+#' @importFrom stats median sd
+#' @examples
+#' requireNamespace("ggplot2", quietly = TRUE)
+#' library(sf, quietly = TRUE)
+#' library(ggplot2)
+#' bbx <- matrix(c(697047,9553483,
+#'                 696158,9560476,
+#'                 700964,9561425,
+#'                 701745,9555358),
+#'               byrow = TRUE,
+#'               ncol = 2)
+#' bbx <- st_multipoint(bbx)
+#' bbx <- st_cast(bbx,"POLYGON")
+#' bbx <- st_sfc(bbx, crs = 31992)
+#' set.seed(1234)
+#' points <- st_sf(geometry = st_sample(bbx, 100))
+#' mean_center <- st_central_point(points, method = "mean")
+#' median_center <- st_central_point(points, method = "median")
+#' geom_center <- st_central_point(points, method = "geometric")
+#' central_feature <- st_central_point(points, method = "feature")
+#' min_dist_center <- st_central_point(points, method = "min.dist")
+#' ggplot() +
+#'   geom_sf(data = points, color = "steelblue", size = 0.5) +
+#'   geom_sf(data = mean_center, color = "blue", size = 3) +
+#'   geom_sf(data = median_center, color = "red") +
+#'   geom_sf(data = geom_center, color = "grey80") +
+#'   geom_sf(data = central_feature, color = "orange") +
+#'   geom_sf(data = min_dist_center, color = "green")
 
 #' @export
 #' @rdname centrality
-median_centre <- function(points) {
-  # Control for few columns in points
-  if (ncol(points) < 2) {
-    stop("'points' must be of class matrix, data.frame or tibble with 2 or 3 numeric columns")
-  }
+st_central_point = function(.x, .y, ...) UseMethod("st_central_point")
 
-  # Control for to many columns in points
-  if (ncol(points) > 3) {
-    warning(
-      "'points' more than 3 columns.\nOnly first three columns are being used as xyz coordinates"
-    )
-    points <- points[, 1:3]
-  }
-
-  # Compute median centre
-  apply(points, 2, median)
+#' @export
+#' @rdname centrality
+st_central_point.sfg <- function(.x, .y = NULL,
+                                 weights = NULL,
+                                 method = c("mean",
+                                            "median",
+                                            "geometric",
+                                            "feature",
+                                            "min.dist"), ...){
+  .x <- st_geometry(.x)
+  if(!is.null(.y)) .y <- st_geometry(.y)
+  st_central_point.sfc(.x, .y, weights, method, ...)
 }
 
 #' @export
 #' @rdname centrality
-mean_centre <- function(points, weights = NULL) {
-  # Control for few columns in points
-  if (ncol(points) < 2) {
-    stop("'points' must be of class matrix, data.frame or tibble with 2 or 3 numeric columns")
-  }
-
-  if (!is.null(weights) && nrow(points) != length(weights)) {
-    stop("'weights' must be same length as number of 'points'")
-  }
-
-  #  Control for to many columns in points
-  if (ncol(points) > 3) {
-    warning(
-      "'points' more than 3 columns.\nOnly first three columns are being used as xyz coordinates"
-    )
-    points <- points[, 1:3]
-  }
-
-  # Mean centre calculation
-  if(!is.null(weights))
-    return(apply(points, 2, weighted.mean, w = weights))
-
-  apply(points, 2, mean)
+st_central_point.sf <- function(.x, .y = NULL,
+                                weights = NULL,
+                                method = c("mean",
+                                           "median",
+                                           "geometric",
+                                           "feature",
+                                           "min.dist"), ...){
+  .x <- st_geometry(.x)
+  if(!is.null(.y)) .y <- st_geometry(.y)
+  st_central_point.sfc(.x, .y, weights, method, ...)
 }
-
 
 #' @export
 #' @rdname centrality
-central_feature <- function(points) {
-  # Control for few columns in points
-  if (ncol(points) < 2) {
-    stop("'points' must be of class matrix, data.frame or tibble with 2 or 3 numeric columns")
+st_central_point.sfc <- function(.x, .y = NULL,
+                                     weights = NULL,
+                                     method = c("mean",
+                                                "median",
+                                                "geometric",
+                                                "feature",
+                                                "min.dist"), ...){
+
+  wstring <- "weighted "
+  if(is.null(weights)) {
+    wstring <- ""
+    weights <- rep(1, length(.x))
   }
 
-  #  Control for to many columns in points
-  if (ncol(points) > 3) {
-    warning(
-      "'points' more than 3 columns.\nOnly first three columns are being used as xyz coordinates"
-    )
-    points <- points[, 1:3]
-  }
+  method <- match.arg(method)
 
-  # Central feature calculation
-  d <- stats::dist(points, diag = TRUE, upper = TRUE)
-  ds <- rowSums(as.matrix(d))
-  unlist(points[which.min(ds), ])
+  if(method == "median")
+    cp <- .median_centre(.x)
+
+  if(method == "mean")
+    cp <- .mean_centre(.x, weights = weights, ...)
+
+  if(method == "geometric")
+    cp <- .geom_mean_centre(.x, weights = weights, ...)
+
+  if(method == "feature")
+    cp <- .central_feature(.x)
+
+  if(method == "min.dist")
+    cp <- .centre_min_dis(.x, ...)
+
+  # if(method == "feature.2sets")
+  #   if(is.null(.y)) stop("Required .y dataset for method feature.2sets")
+  #   cp <- .central_feature2(.x, .y, ...)
+
+  return(
+    st_sf(feature = paste0(wstring, method),
+          geometry = cp)
+  )
 }
 
-#' @importFrom splancs gridpts
-#' @export
+##
+##
+##
+.median_centre <- function(.x, ...) {
+  crd <- apply(st_coordinates(.x), 2, median, ...)
+  st_sfc(st_point(crd), crs = st_crs(.x))
+}
+
+.mean_centre <- function(.x, weights = NULL, ...) {
+  if(is.null(weights)) weights <- rep(1, length(.x))
+  crd <- apply(st_coordinates(.x), 2, weighted.mean, w = weights, ...)
+  st_sfc(st_point(crd), crs = st_crs(.x))
+}
+
+.geom_mean_centre <- function(.x, weights = NULL, ...) {
+  if(is.null(weights)) weights <- rep(1, length(.x))
+
+  .f <- function(x, w){
+    from <- range(x)
+    to <- 0:1
+    crd <- prod((w * scales::rescale(x, to))^(1/length(x)))
+    scales::rescale(crd, from)
+  }
+  crd <- apply(st_coordinates(.x), 2, .f, w = weights, ...)
+  st_sfc(st_point(crd), crs = st_crs(.x))
+  }
+
 #' @rdname centrality
-#' @param npts number of points to calculate the grid resolution
-centre_min_dis <- function(points, dist = 100, npts = 10000) {
-  # Control for few columns in points
-  if (ncol(points) < 2) {
-    stop("'points' must be of class matrix, data.frame or tibble with 2 numeric columns")
-  }
+.central_feature <- function(.x, ...) {
+  d <- st_distance(.x, ...)
+  ds <- rowSums(d)
+  .x[which.min(ds)]
+}
 
-  #  Control for to many columns in points
-  if (ncol(points) > 3) {
-    warning(
-      "'points' more than 2 columns.\nOnly first two columns are being used as 2D coordinates"
-    )
-    points <- points[, 1:2]
-  }
 
-  d <- dist
-  x <- y <- n <- cells <- 0
-  i <- dx <- dy <- 1
+#' @rdname centrality
+.centre_min_dis <- function(.x, dist = 100, tol = 0.1, ...) {
+  crs <- st_crs(.x)
+  units(dist) <- st_crs(.x)$units
+  units(tol) <- st_crs(.x)$units
+  d <- dist * 2
+  xy <- st_sfc(.mean_centre(.x), crs = crs)
 
-  hpts <- chull(points)
-  MCP <- cbind(points[hpts, 1], points[hpts, 2])
-
-  while (d[length(d)] >= dist) {
-    grid <- gridpts(MCP, npts, dx, dy)
-    sumdist.cmd <- vector("numeric", nrow(grid))
-    j = 1
-    while (j <= nrow(grid)) {
-      sumdist.cmd[j] <- sum(distances(points, centre = grid[j, ]))
-      j = j + 1
+  while (d >= dist & dist > tol) {
+    grid <- .point_move(xy, dist = dist, crs = crs)
+    sumdist.cmd <- colSums(st_distance(.x, grid))
+    CMD <- grid[which.min(sumdist.cmd)]
+    d <- st_distance(CMD, xy, by_element = TRUE)
+    if(is.null(st_crs(.x)$units)){
+      units(dist) <- units(d)
+      units(tol) <- units(d)
     }
-    CMD <- grid[which.min(sumdist.cmd),]
-    #Dump CMD for each interation
-    x[i + 1] <- CMD[1]
-    y[i + 1] <- CMD[2]
-    #distance between current and previous
-    d[i + 1] <- distances(matrix(CMD, ncol = ncol(grid)), c(x[i],y[i]))
-    n[i + 1] <- dx
-    cells[i + 1] <- nrow(grid)
-    i <- i + 1
-    dx <- dx + 1
-    dy <- dy + 1
-  }
-  xy <- cbind(x, y)
-  names(xy) <- names(points)
-  #Results
-  result <- data.frame(centre = xy,
-                       dist = d,
-                       cells = cells)
-  return(result[nrow(result), ])
-}
 
-#' @export
-#' @rdname centrality
-central_feature2pts <- function(points, points2) {
-  # Control for few columns in points
-  if(ncol(points) < 2) {
-    stop("'points' must be of class matrix, data.frame or tibble with 2 or 3 numeric columns")
-  }
-
-  # Control for few columns in points2
-  if(ncol(points2) < 2) {
-    stop("'points2' must be of class matrix, data.frame or tibble with 2 or 3 numeric columns")
-  }
-
-  # Control for to many columns in points
-  if(ncol(points) > 3) {
-    warning("'points' more than 3 columns. Only first three columns are being used as xyz coordinates")
-    points <- points[,1:3]
-  }
-
-  # Control for to many columns in points2
-  if(ncol(points2) > 3) {
-    warning("'points2' more than 3 columns. Only first three columns are being used as xyz coordinates")
-    points2 <- points2[,1:3]
-  }
-
-  # Control for same size in points and points2
-  if(ncol(points) != ncol(points2)) {
-    if(ncol(points) > ncol(points2)) {
-      points <- points[,1:2]
-      warning("More dimensions in 'points' than 'points2'. Extra dimensions droped...")
-    } else {
-      points2 <- points2[,1:2]
-      warning("More dimensions in 'points2' than 'points'. Extra dimensions droped...")
+    xy <- CMD
+    if(dist > tol){
+      dist <- dist/2
     }
   }
-  # Central feature between two point patterns
-  d <- vector("numeric", nrow(points2))
-  i = 1
-  while(i <= nrow(points2)){
-    d[i] <- sum(distances(destmat = points, centre = points2[i,]))
-    i = i + 1
-  }
-
-  unlist(points2[which.min(d),])
+  xy
 }
+
+
+#' @rdname centrality
+.central_feature2 <- function(.x, .y) {
+  d <- colSums(st_distance(.y, .x))
+  .x[which.min(d)]
+}
+
+#' @rdname centrality
+.point_move <- function(.x, dist = dist, crs = crs, ...) {
+  st_cast(st_sfc(st_buffer(.x, dist = dist), crs = crs), "POINT")
+}
+

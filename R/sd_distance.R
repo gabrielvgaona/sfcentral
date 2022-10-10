@@ -1,105 +1,93 @@
 #' @title Standard deviation distance calculator (2D)
 #' @author Gabriel Gaona
-#' @param points  matrix, datat.frame or tibble of points 2D
-#' @param x,y  Optional. numeric vectors for `x` and `y` coordinates of points.
-#'   Default NULL perform extraction from point localities (`x = points[,1]` and
-#'   `y <- points[,2]`)
-#' @param centre  Numeric. Coordinates 2D of central point. Default NULL,
-#'   performs a calculation of `mean_centre()` from point localities
-#' @param weights Numeric. Same length of number of points.
-#' @param output Character. `"coord"` to return coordinates for sd_distance
-#'   points in 2D. "param" to return sd_distance attributes for 2D. Default
-#'   c("coord", "param") to return both as list.
-#' @return Depends on input, "coords" returns a data.frame of 2 and 360 point
-#'   coordinates. "param" returns a data.frame with weigted indicator (`1 = TRUE`,
-#'   or `0 = FALSE`), centre coordinates, standard deviation distance radius, and
-#'   area of sd_distance.
-#'
+#' @param .x  Points \code{sf} object
+#' @param centre  \code{sf} \code{sfc} of one point, numeric, matrix, data.frame
+#'   or list of central point. Default NULL, means a calculation of the "mean_centre"
+#'   from \code{.x} localities.
+#' @param weights Numeric. Same length as number of points.
+#' @param ... other parameters for \code{sf::st_distance()}
+#' @return A sf \code{"POLYGON"} with atributes: radius (standard deviation distance)
+#'    and area surrounding, perimeter, center coordinates, and if weigted indicator.
+#' @examples
+#'   requireNamespace("ggplot2", quietly = TRUE)
+#'   library(sf, quietly = TRUE)
+#'   library(ggplot2)
+#'   bbx <- matrix(c(697047,9553483,
+#'                   696158,9560476,
+#'                   700964,9561425,
+#'                   701745,9555358),
+#'                 byrow = TRUE,
+#'                 ncol = 2)
+#'   bbx <- st_multipoint(bbx)
+#'   bbx <- st_cast(bbx,"POLYGON")
+#'   bbx <- st_sfc(bbx, crs = 31992)
+#'   set.seed(1234)
+#'   points <- st_sf(geometry = st_sample(bbx, 100))
+#'   SDD <- st_sd_distance(points)
+#'   ggplot() +
+#'     geom_sf(data = SDD, fill = NA, color = "darkolivegreen") +
+#'     geom_sf(data = points, color = "steelblue", size = 0.5)
 #' @export
-#' @rdname sd_distance
+#' @rdname st_sd_distance
+st_sd_distance = function(.x, centre = NULL, weights = NULL, ...) UseMethod("st_sd_distance")
 
-sd_distance <- function (points = NULL,
-                         x = NULL,
-                         y = NULL,
-                         centre = NULL,
-                         weights = NULL,
-                         output = c("coord", "param")) {
+#' @export
+#' @rdname st_sd_distance
+st_sd_distance.sfg <- function(.x, centre = NULL, weights = NULL, ...){
+  .x <- st_geometry(.x)
+  st_sd_distance.sfc(.x, centre = centre, weights = weights, ...)
+}
 
-  if (all(is.null(points), is.null(x), is.null(y))) {
-    stop("Points data.frame or x, y vectors must be provided")
-  }
+#' @export
+#' @rdname st_sd_distance
+st_sd_distance.sf <- function(.x, centre = NULL, weights = NULL, ...){
+  .x <- st_geometry(.x)
+  st_sd_distance.sfc(.x, centre = centre, weights = weights, ...)
+}
 
-  # Control for few points coordiantes
-  if(ncol(points) < 2) {
-    stop("'points' must be of class matrix, data.frame or tibble with x,y columns")
-  }
+#' @export
+#' @rdname st_sd_distance
+st_sd_distance.sfc <- function (.x,
+                            centre = NULL,
+                            weights = NULL,
+                            ...) {
 
-  # Control for to many points coordiantes
-  if(ncol(points) > 2) {
-    warning("'points' more than 2 columns. Only first two columns are being used as xy coordinates")
-    points <- points[,1:2]
-  }
-  if (is.null(points)) points <- cbind(x, y)
-  if (!is.null(points)) x <- points[[1]]
-  if (!is.null(points)) y <- points[[2]]
+  if (is.null(weights)) {
+    weights <- rep(1, nrow(st_coordinates(.x)))}
 
-  weighted <- FALSE
-  if (!is.null(weights)) weighted <- TRUE
-
-  if (!is.null(centre)) {
-    if (length(centre) == 2) {
-      stop("Invalid center: must be a vector of length = 2")
-    }
-  }
-
-  if (is.null(centre)) centre <- mean_centre(points = points)
-
-  n <- dim(points)[1]
-  dist <- sqrt((x - centre[1]) ^ 2 + (y - centre[2]) ^ 2)
-
-  if (weighted) {
-    SDD <- sqrt(sum((weights * dist ^ 2) / (sum(weights) - 2)))
+  if(is.null(centre)) {
+    centre <- .mean_centre(.x = .x, weights = weights)
   } else {
-    SDD <- sqrt(sum(dist ^ 2 / (length(dist) - 2)))
+    centre_class <- class(centre)[1]
+    centre <- switch(centre_class,
+                     "matrix" = ,
+                     "numeric" = st_sfc(st_point(centre), crs = st_crs(.x)),
+                     "data.frame" = st_sfc(st_point(as.matrix(centre[1,1:2])),
+                                           crs = st_crs(.x)),
+                     "list" = st_sfc(st_point(as.matrix(as.data.frame(centre))),
+                                     crs = st_crs(.x)),
+                     "sfc_POINT" = centre[1],
+                     "sf" = st_geometry(centre),
+                     centre
+                     )
   }
 
-  sddarea <- pi * SDD^2
-  sddperim <- pi * 2 * SDD
-  B <- min(SDD, SDD)
-  A <- max(SDD, SDD)
-  d2 <- (A - B) * (A + B)
-  phi <- 2 * pi * seq(0, 1, len = 360)
-  sp <- sin(phi)
-  cp <- cos(phi)
-  r <- SDD * SDD / sqrt(B ^ 2 + d2 * sp ^ 2)
-  xy <- r * cbind(cp, sp)
-  al <- 0 * pi / 180
-  ca <- cos(al)
-  sa <- sin(al)
+  dist <- st_distance(.x, centre, ...)[,1]
+  SDD <- sqrt(sum((weights * dist ^ 2) / (sum(weights) - 2)))
+  SDD.sfc <-  st_buffer(centre, dist = SDD)
 
-  coordsSDD <- t(t(xy %*% rbind(c(ca, sa), c(-sa, ca))) + centre)
-  coordsSDD <- as.data.frame(coordsSDD)
-  names(coordsSDD) <- colnames(points)[1:2]
-  class(coordsSDD) <- c("sdd_coords", class(coordsSDD))
-
-  result.sdd <- as.data.frame(
-    rbind(
-      c(weighted = weighted,
-        centre = centre,
+  perim <- if(sf::st_is_longlat(SDD.sfc)){
+    sf::st_length(SDD.sfc)
+  } else {
+    lwgeom::st_perimeter(SDD.sfc)
+  }
+  st_sf(feature = "Standard Deviation Distance",
         radius = SDD,
-        area = sddarea,
-        perimeter = sddperim
-      )
-    )
-  )
-  class(result.sdd) <- c("sdd_param", class(result.sdd))
-
-  out <- list("coord" = coordsSDD, "param" = result.sdd)[output]
-  class(out) <- c("sd_distance", class(out))
-
-  if (length(out) == 1)
-    out <- out[[1]]
-  return(out
+        area = st_area(SDD.sfc),
+        perimeter = perim,
+        centre = st_coordinates(centre),
+        weigted = ifelse(all(weights == 1 ), FALSE, TRUE),
+        geometry = st_buffer(centre, dist = SDD)
   )
 }
 
