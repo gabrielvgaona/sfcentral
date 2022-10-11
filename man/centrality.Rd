@@ -5,10 +5,6 @@
 \alias{st_central_point.sfg}
 \alias{st_central_point.sf}
 \alias{st_central_point.sfc}
-\alias{.central_feature}
-\alias{.centre_min_dis}
-\alias{.central_feature2}
-\alias{.point_move}
 \title{Spatial centrality}
 \usage{
 st_central_point(.x, .y, ...)
@@ -36,14 +32,6 @@ st_central_point(.x, .y, ...)
   method = c("mean", "median", "geometric", "feature", "min.dist"),
   ...
 )
-
-.central_feature(.x, ...)
-
-.centre_min_dis(.x, dist = 100, tol = 0.1, ...)
-
-.central_feature2(.x, .y)
-
-.point_move(.x, dist = dist, crs = crs, ...)
 }
 \arguments{
 \item{.x, .y}{\code{sf} points 2D or 3D}
@@ -57,10 +45,6 @@ as number of points.}
 
 \item{dist}{Atomic numeric, Default 100. Starting distance value for center
 moving during iterations.}
-
-\item{tol}{atomic numeric,}
-
-\item{crs}{EPSG code or CRS object returned from \code{st_crs()}}
 }
 \value{
 \code{"Simple Features"} of lenght 1.

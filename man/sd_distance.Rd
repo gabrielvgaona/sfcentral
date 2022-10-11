@@ -16,19 +16,26 @@ st_sd_distance(.x, centre = NULL, weights = NULL, ...)
 \method{st_sd_distance}{sfc}(.x, centre = NULL, weights = NULL, ...)
 }
 \arguments{
-\item{.x}{Points \code{sf} object}
+\item{.x}{\link{sf} points 2D or 3D}
 
-\item{centre}{\code{sf} \code{sfc} of one point, numeric, matrix, data.frame
-or list of central point. Default NULL, means a calculation of the "mean_centre"
+\item{centre}{One central point of class \emph{sf}, \emph{sfc}, \emph{numeric}
+(length 2), \emph{matrix} (2 col, 1 row), \emph{data.frame}  (2 col, 1 row),
+or \emph{list} (length 2). Default \code{NULL}, means a calculation of the \code{\link[=st_central_point]{st_central_point()}}
 from \code{.x} localities.}
 
-\item{weights}{Numeric. Same length as number of points.}
+\item{weights}{Numeric. Same length as number of points in \code{.x}.}
 
-\item{...}{other parameters for \code{sf::st_distance()}}
+\item{...}{other parameters for \code{\link[sf:geos_measures]{sf::st_distance()}}}
 }
 \value{
-A sf \code{"POLYGON"} with atributes: radius (standard deviation distance)
-and area surrounding, perimeter, center coordinates, and if weigted indicator.
+A sf \code{"POLYGON"} with atributes:
+\itemize{
+\item \code{radius} (standard deviation distance)
+\item \code{area} surrounding,
+\item \code{perimeter},
+\item \code{center} coordinates,
+\item \code{weigted} indicator if weights were used or not in the calculaton.
+}
 }
 \description{
 Calculate the spatial deviaction distance from a points sf dataset.

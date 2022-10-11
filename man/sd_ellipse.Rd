@@ -16,7 +16,7 @@ st_sd_ellipse(.x, centre = NULL, weights = NULL, ...)
 \method{st_sd_ellipse}{sfc}(.x, centre = NULL, weights = NULL, ...)
 }
 \arguments{
-\item{.x}{matrix, datat.frame or tibble of points 2D}
+\item{.x}{\code{sf} points 2D or 3D}
 
 \item{centre}{Numeric. Coordinates 2D of central point. Default NULL,
 performs a calculation of \code{mean_centre()} from point localities}

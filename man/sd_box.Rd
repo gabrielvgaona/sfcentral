@@ -16,7 +16,7 @@ st_sd_box(.x, centre = NULL, weights = NULL, ...)
 \method{st_sd_box}{sfc}(.x, centre = NULL, weights = NULL, ...)
 }
 \arguments{
-\item{.x}{matrix, datat.frame or tibble of .x 2D or 3D}
+\item{.x}{\code{sf} points 2D or 3D}
 
 \item{centre}{Numeric. Coordinates 2D or 3D of central point. Default NULL,
 performs a calculation of mean_centre() from point localities}

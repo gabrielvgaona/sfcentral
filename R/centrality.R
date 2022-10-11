@@ -1,15 +1,13 @@
 #' @title Spatial centrality
 #' @author Gabriel Gaona
 #' @description Functions to find spatial measures of gravity centers.
-#' @note inpired on `aspace::*()` from Ron Buliung & Randy Bui (2012)
+#' @note Inspired on `aspace::*()` from Ron Buliung & Randy Bui (2012)
 #' @param .x,.y  \code{sf} points 2D or 3D
 #' @param weights Numeric. Used in for weigthed Mean Center. Has to be same length
 #'                as number of points.
 #' @param method Character. Type of center point to calculate
 #' @param dist Atomic numeric, Default 100. Starting distance value for center
 #'             moving during iterations.
-#' @param tol atomic numeric,
-#' @param crs EPSG code or CRS object returned from \code{st_crs()}
 #' @param ... arguments to be passed to or from other methods
 #' @details Spatial centers are spatial measures of the gravity center. The
 #'          "mean center" is equivalente to the centroid of the points. Calculations
@@ -119,20 +117,25 @@ st_central_point.sfc <- function(.x, .y = NULL,
   )
 }
 
-##
-##
-##
+#' @param .x [sf] `geometry`
+#' @param ... additional parameters for [`stats::median()`]
+#' @noRd
 .median_centre <- function(.x, ...) {
   crd <- apply(st_coordinates(.x), 2, median, ...)
   st_sfc(st_point(crd), crs = st_crs(.x))
 }
 
+#' @param .x [sf] `geometry`
+#' @param ... additional parameters for [`stats::weighted.mean()`]
+#' @noRd
 .mean_centre <- function(.x, weights = NULL, ...) {
   if(is.null(weights)) weights <- rep(1, length(.x))
   crd <- apply(st_coordinates(.x), 2, weighted.mean, w = weights, ...)
   st_sfc(st_point(crd), crs = st_crs(.x))
 }
 
+#' @param .x [sf] `geometry`
+#' @noRd
 .geom_mean_centre <- function(.x, weights = NULL, ...) {
   if(is.null(weights)) weights <- rep(1, length(.x))
 
@@ -146,7 +149,9 @@ st_central_point.sfc <- function(.x, .y = NULL,
   st_sfc(st_point(crd), crs = st_crs(.x))
   }
 
-#' @rdname centrality
+#' @param .x [sf] `geometry`
+#' @param ... additional parameters for [`sf::st_distance()`]
+#' @noRd
 .central_feature <- function(.x, ...) {
   d <- st_distance(.x, ...)
   ds <- rowSums(d)
@@ -154,7 +159,9 @@ st_central_point.sfc <- function(.x, .y = NULL,
 }
 
 
-#' @rdname centrality
+#' @param .x [sf] `geometry`
+#' @param ... ignored
+#' @noRd
 .centre_min_dis <- function(.x, dist = 100, tol = 0.1, ...) {
   crs <- st_crs(.x)
   units(dist) <- st_crs(.x)$units
@@ -181,14 +188,17 @@ st_central_point.sfc <- function(.x, .y = NULL,
 }
 
 
-#' @rdname centrality
-.central_feature2 <- function(.x, .y) {
+#' @param .x [sf] `geometry`
+#' #' @param ... additional parameters for [`sf::st_distance()`]
+#' @noRd
+.central_feature2 <- function(.x, .y, ...) {
   d <- colSums(st_distance(.y, .x))
   .x[which.min(d)]
 }
 
-#' @rdname centrality
-.point_move <- function(.x, dist = dist, crs = crs, ...) {
+#' @param .x [sf] `geometry`
+#' @noRd
+.point_move <- function(.x, dist = dist, crs = crs) {
   st_cast(st_sfc(st_buffer(.x, dist = dist), crs = crs), "POINT")
 }
 

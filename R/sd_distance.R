@@ -1,14 +1,20 @@
 #' @title Standard deviation distance calculator
 #' @description Calculate the spatial deviaction distance from a points sf dataset.
 #' @author Gabriel Gaona
-#' @param .x  Points \code{sf} object
-#' @param centre  \code{sf} \code{sfc} of one point, numeric, matrix, data.frame
-#'   or list of central point. Default NULL, means a calculation of the "mean_centre"
-#'   from \code{.x} localities.
-#' @param weights Numeric. Same length as number of points.
-#' @param ... other parameters for \code{sf::st_distance()}
-#' @return A sf \code{"POLYGON"} with atributes: radius (standard deviation distance)
-#'    and area surrounding, perimeter, center coordinates, and if weigted indicator.
+#' @param .x  [sf] points 2D or 3D
+#' @param centre  One central point of class _sf_, _sfc_, _numeric_
+#'   (length 2), _matrix_ (2 col, 1 row), _data.frame_  (2 col, 1 row),
+#'   or _list_ (length 2). Default `NULL`, means a calculation of the [`st_central_point()`]
+#'   from `.x` localities.
+#' @param weights Numeric. Same length as number of points in `.x`.
+#' @param ... other parameters for [`sf::st_distance()`]
+#' @return A sf `"POLYGON"` with atributes:
+#'
+#' - `radius` (standard deviation distance)
+#' - `area` surrounding,
+#' - `perimeter`,
+#' - `center` coordinates,
+#' - `weigted` indicator if weights were used or not in the calculaton.
 #' @examples
 #'   requireNamespace("ggplot2", quietly = TRUE)
 #'   library(sf, quietly = TRUE)
