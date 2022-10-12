@@ -1,0 +1,42 @@
+variables:
+  _R_CHECK_CRAN_INCOMING_: "true"
+  _R_CHECK_FORCE_SUGGESTS_: "true"
+  APT_PKGS: "git qpdf"
+
+image: rocker/geospatial:latest
+
+before_script:
+  - apt-get update
+  - apt-get install -y --no-install-recommends ${APT_PKGS}
+  - R -e 'install.packages(c("pkgdown", "testthat"));'
+  - R -e "devtools::install_deps(dependencies = TRUE);"
+
+stages:
+  - test
+  - deploy
+
+testing-MR:
+  stage: test
+  script:
+    - R -e 'devtools::check();'
+    - Rscript -e 'devtools::test();'
+  only:
+    - merge_requests
+
+testing-master:
+  stage: test
+  script:
+    - Rscript -e 'devtools::check();'
+    - Rscript -e 'devtools::test();'
+  only:
+    - master
+
+pages:
+  stage: deploy
+  script:
+    - R -e 'devtools::document(); pkgdown::build_site();'
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
