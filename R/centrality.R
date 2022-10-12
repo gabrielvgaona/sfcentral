@@ -13,10 +13,10 @@
 #'
 #' `methods` options are:
 #'  `"mean"` is the mean center (equivalent to centroid of the points) calculated by
-#'  the arithmetic mean of each axis.
-#'  `"geometric"`, is the corresponding geometric mean of each axis
-#'  `"median"`, is the median center, a pair of c(median(x), median(y)) coordinates
-#'  `"feature"`, is a minimization of the sum of distances from _ith_ point to every point
+#'  the arithmetic mean of each axis;
+#'  `"geometric"`, is the corresponding geometric mean of each axis;
+#'  `"median"`, is the median center, a pair of c(median(x), median(y)) coordinates;
+#'  `"feature"`, is a minimization of the sum of distances from _ith_ point to every point;
 #'  `"min.dist"`, is iterative looking for the closest point in bbox of .x
 #'  that minimizes the sum of distances from _ith_ point to every point in the dataset
 #'
