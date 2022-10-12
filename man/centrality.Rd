@@ -53,12 +53,19 @@ moving during iterations.}
 Functions to find spatial measures of gravity centers.
 }
 \details{
-Spatial centers are spatial measures of the gravity center. The
-"mean center" is equivalente to the centroid of the points. Calculations
-could be used in 2D or 3D points.
+Spatial centers are spatial measures of the gravity center.
+
+\code{methods} options are:
+\code{"mean"} is the mean center (equivalent to centroid of the points) calculated by
+the arithmetic mean of each axis.
+\code{"geometric"}, is the corresponding geometric mean of each axis
+\code{"median"}, is the median center, a pair of c(median(x), median(y)) coordinates
+\code{"feature"}, is a minimization of the sum of distances from \emph{ith} point to every point
+\code{"min.dist"}, is iterative looking for the closest point in bbox of .x
+that minimizes the sum of distances from \emph{ith} point to every point in the dataset
 }
 \note{
-inpired on \verb{aspace::*()} from Ron Buliung & Randy Bui (2012)
+Inspired on \verb{aspace::*()} from Ron Buliung & Randy Bui (2012)
 }
 \examples{
 requireNamespace("ggplot2", quietly = TRUE)

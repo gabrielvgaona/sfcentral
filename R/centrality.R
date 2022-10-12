@@ -9,9 +9,17 @@
 #' @param dist Atomic numeric, Default 100. Starting distance value for center
 #'             moving during iterations.
 #' @param ... arguments to be passed to or from other methods
-#' @details Spatial centers are spatial measures of the gravity center. The
-#'          "mean center" is equivalente to the centroid of the points. Calculations
-#'          could be used in 2D or 3D points.
+#' @details Spatial centers are spatial measures of the gravity center.
+#'
+#' `methods` options are:
+#'  `"mean"` is the mean center (equivalent to centroid of the points) calculated by
+#'  the arithmetic mean of each axis.
+#'  `"geometric"`, is the corresponding geometric mean of each axis
+#'  `"median"`, is the median center, a pair of c(median(x), median(y)) coordinates
+#'  `"feature"`, is a minimization of the sum of distances from _ith_ point to every point
+#'  `"min.dist"`, is iterative looking for the closest point in bbox of .x
+#'  that minimizes the sum of distances from _ith_ point to every point in the dataset
+#'
 #' @return \code{"Simple Features"} of lenght 1.
 #' @importFrom stats median sd
 #' @examples
@@ -192,7 +200,7 @@ st_central_point.sfc <- function(.x, .y = NULL,
 #' #' @param ... additional parameters for [`sf::st_distance()`]
 #' @noRd
 .central_feature2 <- function(.x, .y, ...) {
-  d <- colSums(st_distance(.y, .x))
+  d <- colSums(st_distance(.x, .y))
   .x[which.min(d)]
 }
 
