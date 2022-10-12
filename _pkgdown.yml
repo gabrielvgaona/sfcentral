@@ -1,4 +1,12 @@
+destination: public
 url: https://gavg712.gitlab.io/sfcentral
 template:
   bootstrap: 5
 
+navbar:
+  title: "`sfcentral` an R package for Spatial centrallity and dispersion statistics"
+  right:
+    - icon: fa-telegram
+      href: https://t.me/rspatial_es
+    - icon: fa-gitlab
+      href: https://gitlab.com/gavg712/sfcentral
