@@ -1,6 +1,6 @@
 Package: sfcentral
 Title: Spatial centrallity and dispersion statistics
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: 
     person(given = "Gabriel V.",
            family = "Gaona",
