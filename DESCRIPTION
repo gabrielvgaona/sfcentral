@@ -9,10 +9,10 @@ Authors@R:
            comment = c(ORCID = "0000-0003-4666-2248"))
 Date: 2024-03-11
 Maintainer: Gabriel V. Gaona <gabo@gavg712.com>
-Description: This package is a collection of functions for computing 
-    centrographic statistics (central points, standard distance, standard deviation 
-    ellipse, standard deviation box) for observations taken at point locations 
-    in 2D or 3D. The sfcentral library was inspired in aspace package but 
+Description: A collection of functions for computing centrographic statistics
+    (central points, standard distance, standard deviation ellipse, standard 
+    deviation box) for observations taken at point locations in 2D or 3D. The
+    sfcentral library was inspired in aspace package but 
     conceived to be used in a spatial tidyverse context.
 URL: https://gavg712.gitlab.io/sfcentral/, https://gitlab.com/gavg712/sfcentral
 BugReports: https://gitlab.com/gavg712/sfcentral/-/issues
