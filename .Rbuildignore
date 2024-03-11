@@ -5,3 +5,5 @@
 ^public$
 ^.pkgdown$
 .gitlab-ci.yml
+^\.gitlab-ci\.yml$
+^ci/lib$
