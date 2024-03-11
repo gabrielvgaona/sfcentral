@@ -4,9 +4,9 @@
 \name{sfcentral-package}
 \alias{sfcentral}
 \alias{sfcentral-package}
-\title{sfcentral: Spatial centrallity and dispersion statistics}
+\title{sfcentral: Spatial Centrallity and Dispersion Statistics}
 \description{
-sfcentral package is a collection of functions for computing centrographic statistics (e.g., standard distance, standard deviation ellipse, standard deviation box) for observations taken at point locations in 2D or 3D. The sfcentral library was inspired in aspace package but conceived to be used in a tidy*-sf context, (e.g in `dplyr::groupy_by`, `dplyr::summarise`, `dplyr::mutate`, etc, contexts).
+This package is a collection of functions for computing centrographic statistics (central points, standard distance, standard deviation ellipse, standard deviation box) for observations taken at point locations in 2D or 3D. The sfcentral library was inspired in aspace package but conceived to be used in a spatial tidyverse context.
 }
 \author{
 \strong{Maintainer}: Gabriel V. Gaona \email{gabo@gavg712.com} (\href{https://orcid.org/0000-0003-4666-2248}{ORCID})
