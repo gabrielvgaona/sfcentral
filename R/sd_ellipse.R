@@ -159,7 +159,7 @@ st_sd_ellipse.sfc <- function (.x,
   perim <- if(sf::st_is_longlat(SDE.sfc)){
     sf::st_length(SDE.sfc)
   } else {
-    lwgeom::st_perimeter(SDE.sfc)
+    lwgeom::st_perimeter_lwgeom(SDE.sfc)
   }
 
   st_sf(feature = "Standard deviation ellipse",

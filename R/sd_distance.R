@@ -90,7 +90,7 @@ st_sd_distance.sfc <- function (.x,
   perim <- if(sf::st_is_longlat(SDD.sfc)){
     sf::st_length(SDD.sfc)
   } else {
-    lwgeom::st_perimeter(SDD.sfc)
+    lwgeom::st_perimeter_lwgeom(SDD.sfc)
   }
   st_sf(feature = "Standard deviation distance",
         radius = SDD,
