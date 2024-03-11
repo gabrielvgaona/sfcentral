@@ -4,20 +4,23 @@ Spatial centrallity and dispersion statistics
 
 ## Description:
 
-`sfcentral` package is a collection of functions for computing centrographic 
-statistics (e.g., standard distance, standard deviation ellipse, standard 
-deviation box) for observations taken at point locations. The `sfcentral` library 
-was conceived to be used in a tidy* context, (e.g in `dplyr::groupy_by`,
-`dplyr::summarise`, `dplyr::mutate`, etc, contexts).
+This package is a collection of functions for computing centrographic 
+statistics (e.g., central points, standard distance, standard deviation ellipse, standard 
+deviation box) for observations taken at point locations. The library 
+was conceived  to be used in a spatial tidyverse context.
 
 ## Installation:
 
-`sfcentral` package is not in CRAN, but cand be installed by `remotes`.
+From CRAN repositories:
 
+```r
+install.packages("sfcentral")
 ```
-# install.packages("remotes")
 
-# from GitLab (main repository)
+From source code in GitLab
+
+```r
+# install.packages("remotes")
 remotes::install_gitlab('gavg712/sfcentral')
 ```
 
