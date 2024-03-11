@@ -52,6 +52,11 @@ st_sd_box.sf <- function(.x, centre = NULL, weights = NULL, ...){
 #' @rdname sd_box
 st_sd_box.sfc <- function(.x, centre = NULL, weights = NULL, ...) {
 
+  if(is.na(sf::st_crs(.x))){
+    warning("st_crs(.x) returned NA, asuming EPSG:4326")
+    sf::st_crs(.x) <- 4326
+  }
+
   if (is.null(weights)) {
     weigthed <- FALSE
     weights <- rep(1, nrow(st_coordinates(.x)))
@@ -81,7 +86,7 @@ st_sd_box.sfc <- function(.x, centre = NULL, weights = NULL, ...) {
   sd_bbox <- t(as.numeric(st_coordinates(centre)) + dirs * SD)
   sd_bbox <- st_multipoint(sd_bbox)
   sd_bbox <- st_cast(sd_bbox, "POLYGON")
-  sd_bbox <- st_sf(feature = "standard distance box",
+  sd_bbox <- st_sf(feature = "Standard distance box",
                    geometry = st_sfc(sd_bbox, crs = st_crs(.x)))
 
   param <- data.frame(

@@ -58,6 +58,10 @@ st_sd_distance.sfc <- function (.x,
                             centre = NULL,
                             weights = NULL,
                             ...) {
+  if(is.na(sf::st_crs(.x))){
+    warning("st_crs(.x) returned NA, asuming EPSG:4326")
+    sf::st_crs(.x) <- 4326
+  }
 
   if (is.null(weights)) {
     weights <- rep(1, nrow(st_coordinates(.x)))}
@@ -88,7 +92,7 @@ st_sd_distance.sfc <- function (.x,
   } else {
     lwgeom::st_perimeter(SDD.sfc)
   }
-  st_sf(feature = "Standard Deviation Distance",
+  st_sf(feature = "Standard deviation distance",
         radius = SDD,
         area = st_area(SDD.sfc),
         perimeter = perim,

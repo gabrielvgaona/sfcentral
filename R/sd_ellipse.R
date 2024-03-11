@@ -53,6 +53,11 @@ st_sd_ellipse.sfc <- function (.x,
                        centre = NULL,
                        weights = NULL,
                        ...) {
+  if(is.na(sf::st_crs(.x))){
+    warning("st_crs(.x) returned NA, asuming EPSG:4326")
+    sf::st_crs(.x) <- 4326
+  }
+
   # Control for weights
   if (is.null(weights)) {
     weigthed <- FALSE
