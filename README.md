@@ -28,4 +28,4 @@ remotes::install_gitlab('gavg712/sfcentral')
 
 Any issue found? Please let me know. Report bus, issues, etc. at:
 
-* At GitLab (main repository): https://gitlab.com/gavg712/sfcentral/issues
+* At GitLab (main repository): https://gitlab.com/gavg712/sfcentral/-/issues
