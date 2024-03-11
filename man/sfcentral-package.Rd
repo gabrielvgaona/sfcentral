@@ -4,9 +4,9 @@
 \name{sfcentral-package}
 \alias{sfcentral}
 \alias{sfcentral-package}
-\title{sfcentral: Spatial Centrallity and Dispersion Statistics}
+\title{sfcentral: Spatial Centrality and Dispersion Statistics}
 \description{
-A collection of functions for computing centrographic statistics (central points, standard distance, standard deviation ellipse, standard deviation box) for observations taken at point locations in 2D or 3D. The sfcentral library was inspired in aspace package but conceived to be used in a spatial tidyverse context.
+Computing centrographic statistics (central points, standard distance, standard deviation ellipse, standard deviation box) for observations taken at point locations in 2D or 3D. The 'sfcentral' library was inspired in 'aspace' package but conceived to be used in a spatial 'tidyverse' context.
 }
 \seealso{
 Useful links:
