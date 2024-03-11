@@ -14,6 +14,8 @@ Description: This package is a collection of functions for computing
     ellipse, standard deviation box) for observations taken at point locations 
     in 2D or 3D. The sfcentral library was inspired in aspace package but 
     conceived to be used in a spatial tidyverse context.
+URL: https://gavg712.gitlab.io/sfcentral/, https://gitlab.com/gavg712/sfcentral
+BugReports: https://gitlab.com/gavg712/sfcentral/-/issues
 Language: en-US
 License: GPL (>= 3)
 Encoding: UTF-8
