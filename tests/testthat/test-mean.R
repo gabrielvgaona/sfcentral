@@ -6,7 +6,13 @@ test_that("mean center works", {
   expect_equal(st_coordinates(st_central_point(x)),
                matrix(apply(y, 2, mean), ncol = 2,
                       dimnames = list(1, c("X", "Y"))))
+  expect_equal(st_coordinates(st_central_point(x, method = "median")),
+               matrix(apply(y, 2, median), ncol = 2,
+                      dimnames = list(1, c("X", "Y"))))
+  expect_equal(st_coordinates(st_central_point(x, method = "feature")),
+               matrix(c(2, 2), ncol = 2, dimnames = list(1, c("X", "Y"))))
   expect_equal(nrow(st_central_point(x)), 1)
   expect_error(st_central_point(y))
-  expect_s3_class(st_central_point(x), c("sf", "data.frame"))
+  expect_s3_class(st_central_point(x), class(x))
+  expect_s3_class(st_central_point(sf::st_geometry(x)), class(x))
 })
