@@ -1,23 +1,24 @@
 Package: sfcentral
-Title: Spatial centrallity and dispersion statistics
-Version: 0.1.0.9000
+Title: Spatial Centrallity and Dispersion Statistics
+Version: 0.1.0
 Authors@R: 
     person(given = "Gabriel V.",
            family = "Gaona",
            role = c("aut", "cre"),
            email = "gabo@gavg712.com",
            comment = c(ORCID = "0000-0003-4666-2248"))
-Date: 2022-10-13
-Maintainer: Gabriel Gaona <gabo@gavg712.com>
-Description: sfcentral package is a collection of functions for computing 
+Date: 2024-03-11
+Maintainer: Gabriel V. Gaona <gabo@gavg712.com>
+Description: This package is a collection of functions for computing 
     centrographic statistics (central points, standard distance, standard deviation 
     ellipse, standard deviation box) for observations taken at point locations 
     in 2D or 3D. The sfcentral library was inspired in aspace package but 
     conceived to be used in a spatial tidyverse context.
+Language: en-US
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.1
 Imports: 
     geodist (>= 0.0.7),
     Hmisc (>= 4.6.0),
