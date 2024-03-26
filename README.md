@@ -4,7 +4,7 @@ Spatial centrallity and dispersion statistics
 
 ## Description:
 
-This package is a collection of functions for computing centrographic 
+A collection of functions for computing centrographic 
 statistics (e.g., central points, standard distance, standard deviation ellipse, standard 
 deviation box) for observations taken at point locations. The library 
 was conceived  to be used in a spatial tidyverse context.
