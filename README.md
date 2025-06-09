@@ -1,3 +1,7 @@
+[![registry status badge](https://gabrielvgaona.r-universe.dev/badges/:registry)](https://gabrielvgaona.r-universe.dev/) [![sfcentral status badge](https://gabrielvgaona.r-universe.dev/sfcentral/badges/version)](https://gabrielvgaona.r-universe.dev/sfcentral)
+
+---
+
 # R package sfcentral
 
 Spatial centrallity and dispersion statistics
