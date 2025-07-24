@@ -82,7 +82,7 @@ st_sd_box.sfc <- function(.x, centre = NULL, weights = NULL, ...) {
   SD <- apply(st_coordinates(.x), 2, Hmisc::wtd.var, weights = weights) ^ (1/2)
 
   dirs <- t(expand.grid(rep(list(c(1, -1)), each = length(SD))))
-  dirs <- dirs[,rank(apply(dirs, 2, \(x){atan2(x[2], x[1])}))]
+  dirs <- dirs[,rank(apply(dirs, 2, function(x){atan2(x[2], x[1])}))]
   sd_bbox <- t(as.numeric(st_coordinates(centre)) + dirs * SD)
   sd_bbox <- st_multipoint(sd_bbox)
   sd_bbox <- st_cast(sd_bbox, "POLYGON")
