@@ -16,7 +16,7 @@ st_sd_distance(.x, centre = NULL, weights = NULL, ...)
 \method{st_sd_distance}{sfc}(.x, centre = NULL, weights = NULL, ...)
 }
 \arguments{
-\item{.x}{\link{sf} points 2D or 3D}
+\item{.x}{\code{sf} points 2D or 3D}
 
 \item{centre}{One central point of class \emph{sf}, \emph{sfc}, \emph{numeric}
 (length 2), \emph{matrix} (2 col, 1 row), \emph{data.frame}  (2 col, 1 row),

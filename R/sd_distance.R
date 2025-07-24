@@ -1,7 +1,7 @@
 #' @title Standard deviation distance calculator
 #' @description Calculate the spatial deviaction distance from a points sf dataset.
 #' @author Gabriel Gaona
-#' @param .x  [sf] points 2D or 3D
+#' @param .x  \code{sf} points 2D or 3D
 #' @param centre  One central point of class _sf_, _sfc_, _numeric_
 #'   (length 2), _matrix_ (2 col, 1 row), _data.frame_  (2 col, 1 row),
 #'   or _list_ (length 2). Default `NULL`, means a calculation of the [`st_central_point()`]
