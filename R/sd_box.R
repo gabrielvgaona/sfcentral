@@ -1,5 +1,5 @@
 #' @title Standard deviation box calculator in 2D or 3D
-#' @description Calculate the spatial deviaction box from a points sf dataset.
+#' @description Calculate the spatial deviation box from a points sf dataset.
 #' #' @author Gabriel Gaona
 #' @param .x  \code{sf} points 2D or 3D
 #' @param centre  Numeric. Coordinates 2D or 3D of central point. Default NULL,
@@ -7,7 +7,7 @@
 #' @param weights Numeric. Same length of number of .x.
 #' @param ... ignored
 #' @return Depends on input, "coords" returns a data.frame of 2 or 3 columns and
-#'   4 or 8 point coordinates. "param" returns a data.frame with centre
+#'   4 or 8 point coordinates. "param" returns a data.frame with center
 #'   coordinates, standard deviation in each axis, space(area for 2D, volume for
 #'   3D) and number of dimensions in coordinates.
 #' @importFrom Hmisc wtd.var
