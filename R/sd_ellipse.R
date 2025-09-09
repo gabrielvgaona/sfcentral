@@ -1,13 +1,13 @@
 #' @title Standard deviation ellipse calculator
-#' @description Calculate the spatial deviaction ellipse from a points sf dataset.
+#' @description Calculate the spatial deviation ellipse from a points sf dataset.
 #' @author Gabriel Gaona
 #' @param .x  \code{sf} points 2D or 3D
 #' @param centre  Numeric. Coordinates 2D of central point. Default NULL,
 #'   performs a calculation of `mean_centre()` from point localities
 #' @param weights Numeric. Same length of number of points.
 #' @param ... ignored
-#' @return simple features as "POLYGON"  with atributes:
-#' centre coordinates, values for mayor and minor axis radius (sigma.x and sigma.y),
+#' @return simple features as "POLYGON"  with attribute:
+#' center coordinates, values for mayor and minor axis radius (sigma.x and sigma.y),
 #' rotation (theta and theta_corrected) and geometry properties (eccentricity, area
 #' and perimeter)
 #' @examples
