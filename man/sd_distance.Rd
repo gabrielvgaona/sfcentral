@@ -28,17 +28,17 @@ from \code{.x} localities.}
 \item{...}{other parameters for \code{\link[sf:geos_measures]{sf::st_distance()}}}
 }
 \value{
-A sf \code{"POLYGON"} with atributes:
+A sf \code{"POLYGON"} with attribute:
 \itemize{
 \item \code{radius} (standard deviation distance)
 \item \code{area} surrounding,
 \item \code{perimeter},
 \item \code{center} coordinates,
-\item \code{weigted} indicator if weights were used or not in the calculaton.
+\item \code{weighted} indicator if weights were used or not in the calculation.
 }
 }
 \description{
-Calculate the spatial deviaction distance from a points sf dataset.
+Calculate the spatial deviation distance from a points sf dataset.
 }
 \examples{
   requireNamespace("ggplot2", quietly = TRUE)

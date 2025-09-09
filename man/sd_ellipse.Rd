@@ -26,13 +26,13 @@ performs a calculation of \code{mean_centre()} from point localities}
 \item{...}{ignored}
 }
 \value{
-simple features as "POLYGON"  with atributes:
-centre coordinates, values for mayor and minor axis radius (sigma.x and sigma.y),
+simple features as "POLYGON"  with attribute:
+center coordinates, values for mayor and minor axis radius (sigma.x and sigma.y),
 rotation (theta and theta_corrected) and geometry properties (eccentricity, area
 and perimeter)
 }
 \description{
-Calculate the spatial deviaction ellipse from a points sf dataset.
+Calculate the spatial deviation ellipse from a points sf dataset.
 }
 \examples{
   requireNamespace("ggplot2", quietly = TRUE)

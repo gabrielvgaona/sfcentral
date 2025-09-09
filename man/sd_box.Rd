@@ -27,12 +27,12 @@ performs a calculation of mean_centre() from point localities}
 }
 \value{
 Depends on input, "coords" returns a data.frame of 2 or 3 columns and
-4 or 8 point coordinates. "param" returns a data.frame with centre
+4 or 8 point coordinates. "param" returns a data.frame with center
 coordinates, standard deviation in each axis, space(area for 2D, volume for
 3D) and number of dimensions in coordinates.
 }
 \description{
-Calculate the spatial deviaction box from a points sf dataset.
+Calculate the spatial deviation box from a points sf dataset.
 #' @author Gabriel Gaona
 }
 \examples{
