@@ -1,10 +1,10 @@
 # sfcentral (development version)
 
-# sfcentral 0.1.0
+# sfcentral 0.1.1
 
 ## Minor changes
 
-* Fix syntax to avoid dependecy on R > 4.1.0
+* Fix syntax to avoid dependency on R > 4.1.0
 * Fix notes about packages anchors
 
 # sfcentral 0.1.0
