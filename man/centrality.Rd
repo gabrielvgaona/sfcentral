@@ -38,7 +38,7 @@ st_central_point(.x, .y, ...)
 
 \item{...}{arguments to be passed to or from other methods}
 
-\item{weights}{Numeric. Used in for weigthed Mean Center. Has to be same length
+\item{weights}{Numeric. Used in for weighted Mean Center. Has to be same length
 as number of points.}
 
 \item{method}{Character. Type of center point to calculate}
@@ -47,7 +47,7 @@ as number of points.}
 moving during iterations.}
 }
 \value{
-\code{"Simple Features"} of lenght 1.
+\code{"Simple Features"} of length 1.
 }
 \description{
 Functions to find spatial measures of gravity centers.
