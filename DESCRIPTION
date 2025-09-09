@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "gabo@gavg712.com",
            comment = c(ORCID = "0000-0003-4666-2248"))
-Date: 2024-03-11
+Date: 2025-07-25
 Maintainer: Gabriel V. Gaona <gabo@gavg712.com>
 Description: Compute centrographic statistics (central points, standard 
     distance, standard deviation ellipse, standard deviation box) for 
