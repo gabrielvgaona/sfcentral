@@ -3,7 +3,7 @@
 #' @description Functions to find spatial measures of gravity centers.
 #' @note Inspired on `aspace::*()` from Ron Buliung & Randy Bui (2012)
 #' @param .x,.y  \code{sf} points 2D or 3D
-#' @param weights Numeric. Used in for weigthed Mean Center. Has to be same length
+#' @param weights Numeric. Used in for weighted Mean Center. Has to be same length
 #'                as number of points.
 #' @param method Character. Type of center point to calculate
 #' @param dist Atomic numeric, Default 100. Starting distance value for center
@@ -20,7 +20,7 @@
 #'  `"min.dist"`, is iterative looking for the closest point in bbox of .x
 #'  that minimizes the sum of distances from _ith_ point to every point in the dataset
 #'
-#' @return \code{"Simple Features"} of lenght 1.
+#' @return \code{"Simple Features"} of length 1.
 #' @importFrom stats median sd
 #' @examples
 #' requireNamespace("ggplot2", quietly = TRUE)
