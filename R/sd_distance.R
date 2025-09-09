@@ -1,5 +1,5 @@
 #' @title Standard deviation distance calculator
-#' @description Calculate the spatial deviaction distance from a points sf dataset.
+#' @description Calculate the spatial deviation distance from a points sf dataset.
 #' @author Gabriel Gaona
 #' @param .x  \code{sf} points 2D or 3D
 #' @param centre  One central point of class _sf_, _sfc_, _numeric_
@@ -8,13 +8,13 @@
 #'   from `.x` localities.
 #' @param weights Numeric. Same length as number of points in `.x`.
 #' @param ... other parameters for [`sf::st_distance()`]
-#' @return A sf `"POLYGON"` with atributes:
+#' @return A sf `"POLYGON"` with attribute:
 #'
 #' - `radius` (standard deviation distance)
 #' - `area` surrounding,
 #' - `perimeter`,
 #' - `center` coordinates,
-#' - `weigted` indicator if weights were used or not in the calculaton.
+#' - `weighted` indicator if weights were used or not in the calculation.
 #' @examples
 #'   requireNamespace("ggplot2", quietly = TRUE)
 #'   library(sf, quietly = TRUE)
@@ -97,7 +97,7 @@ st_sd_distance.sfc <- function (.x,
         area = st_area(SDD.sfc),
         perimeter = perim,
         centre = st_coordinates(centre),
-        weigted = ifelse(all(weights == 1 ), FALSE, TRUE),
+        weighted = ifelse(all(weights == 1 ), FALSE, TRUE),
         geometry = st_buffer(centre, dist = SDD)
   )
 }
