@@ -1,6 +1,6 @@
 # sfcentral (development version)
 
-# sfcentral 0.1.1.9
+# sfcentral 0.1.2
 ## Minor changes
 
 * Patch for ignore github workflow at building stage
